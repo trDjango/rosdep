@@ -33,7 +33,7 @@ import subprocess
 import sys
 import re
 
-from rospkg.os_detect import OS_DEBIAN, OS_LINARO, OS_UBUNTU, OS_ELEMENTARY, OsDetect
+from rospkg.os_detect import OS_DEBIAN, OS_DEEPIN, OS_LINARO, OS_UBUNTU, OS_ELEMENTARY, OsDetect
 
 from .pip import PIP_INSTALLER
 from .gem import GEM_INSTALLER
@@ -50,6 +50,7 @@ def register_installers(context):
 
 def register_platforms(context):
     register_debian(context)
+    register_deepin(context)
     register_linaro(context)
     register_ubuntu(context)
     register_elementary(context)
@@ -61,6 +62,14 @@ def register_debian(context):
     context.add_os_installer_key(OS_DEBIAN, SOURCE_INSTALLER)
     context.set_default_os_installer_key(OS_DEBIAN, lambda self: APT_INSTALLER)
     context.set_os_version_type(OS_DEBIAN, OsDetect.get_codename)
+
+def register_deepin(context):
+    context.add_os_installer_key(OS_DEEPIN, APT_INSTALLER)
+    context.add_os_installer_key(OS_DEEPIN, PIP_INSTALLER)
+    context.add_os_installer_key(OS_DEEPIN, GEM_INSTALLER)
+    context.add_os_installer_key(OS_DEEPIN, SOURCE_INSTALLER)
+    context.set_default_os_installer_key(OS_DEEPIN, lambda self: APT_INSTALLER)
+    context.set_os_version_type(OS_DEEPIN, OsDetect.get_codename)
     
 def register_linaro(context):
     # Linaro is an alias for Ubuntu. If linaro is detected and it's not set as an override force ubuntu.
